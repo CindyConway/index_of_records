@@ -1,0 +1,11 @@
+curl -XPUT 'http://ADD_URL:ADD_PORT/_river/mongodb/_meta' -d '{
+    "type": "mongodb",
+    "mongodb": {
+      "db": "index_of_records",
+      "collection": "elasticsearch_fmt"
+    },
+    "index": {
+      "name": "index_of_records",
+      "type": "record_types"
+    }
+  }'

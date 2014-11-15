@@ -1,0 +1,29 @@
+0 info it worked if it ends with ok
+1 verbose cli [ '/usr/local/bin/node',
+1 verbose cli   '/usr/local/bin/npm',
+1 verbose cli   'uninstall',
+1 verbose cli   'mongo-watch',
+1 verbose cli   '--save' ]
+2 info using npm@1.4.28
+3 info using node@v0.10.32
+4 verbose node_modules/mongo-watch unbuild
+5 info preuninstall mongo-watch@0.2.8
+6 info uninstall mongo-watch@0.2.8
+7 verbose true,/Users/cindy/Projects/index_of_records/node_modules,/Users/cindy/Projects/index_of_records/node_modules unbuild mongo-watch@0.2.8
+8 info postuninstall mongo-watch@0.2.8
+9 error Error: EACCES, unlink '/Users/cindy/Projects/index_of_records/node_modules/mongo-watch/node_modules/.bin/cake'
+9 error  { [Error: EACCES, unlink '/Users/cindy/Projects/index_of_records/node_modules/mongo-watch/node_modules/.bin/cake']
+9 error   errno: 3,
+9 error   code: 'EACCES',
+9 error   path: '/Users/cindy/Projects/index_of_records/node_modules/mongo-watch/node_modules/.bin/cake' }
+10 error Please try running this command again as root/Administrator.
+11 error System Darwin 14.0.0
+12 error command "/usr/local/bin/node" "/usr/local/bin/npm" "uninstall" "mongo-watch" "--save"
+13 error cwd /Users/cindy/Projects/index_of_records
+14 error node -v v0.10.32
+15 error npm -v 1.4.28
+16 error path /Users/cindy/Projects/index_of_records/node_modules/mongo-watch/node_modules/.bin/cake
+17 error code EACCES
+18 error errno 3
+19 error stack Error: EACCES, unlink '/Users/cindy/Projects/index_of_records/node_modules/mongo-watch/node_modules/.bin/cake'
+20 verbose exit [ 3, true ]

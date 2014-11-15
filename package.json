@@ -1,0 +1,31 @@
+{
+  "name": "index_of_records",
+  "main": "server.js",
+  "dependencies": {
+    "body-parser": "^1.9.0",
+    "compression": "1.1.*",
+    "express": "~4.0.0",
+    "express-mongo-db": "^0.4.0",
+    "mongo-oplog": "^0.1.5",
+    "mongodb": "^1.4.17",
+    "mongoose": "~3.8.16",
+    "mongoose-unique-validator": "0.3.0",
+    "util": "^0.10.3"
+  },
+  "scripts": {
+    "start": "node server.js"
+  },
+  "version": "0.0.1",
+  "description": "API for the Sunshine Ordinance Index of Records",
+  "devDependencies": {},
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/CindyConway/index_of_records.git"
+  },
+  "author": "Cindy Conway",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/CindyConway/index_of_records/issues"
+  },
+  "homepage": "https://github.com/CindyConway/index_of_records"
+}

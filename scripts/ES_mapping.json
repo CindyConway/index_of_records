@@ -1,0 +1,162 @@
+PUT /index_of_records/
+{
+  "settings": {
+    "number_of_shards": 5
+  },
+  "mappings": {
+    "record_types": {
+      "properties": {
+        "category": {
+          "type": "string",
+          "index": "analyzed",
+          "analyzer": "english",
+          "fields": {
+            "std": {
+              "type": "string",
+              "analyzer": "standard"
+            },
+            "og": {
+              "type": "string",
+              "index": "not_analyzed"
+            }
+          }
+        },
+        "contact": {
+          "type": "string",
+          "index": "analyzed"
+        },
+        "department": {
+          "type": "string",
+          "index": "analyzed",
+          "analyzer": "english",
+          "fields": {
+            "std": {
+              "type": "string",
+              "analyzer": "standard"
+            },
+            "og": {
+              "type": "string",
+              "index": "not_analyzed"
+            }
+          }
+        },
+        "division": {
+          "type": "string",
+          "index": "analyzed",
+          "analyzer": "english",
+          "fields": {
+            "std": {
+              "type": "string",
+              "analyzer": "standard"
+            },
+            "og": {
+              "type": "string",
+              "index": "not_analyzed"
+            }
+          }
+        },
+        "email": {
+          "type": "string",
+          "index": "not_analyzed"
+        },
+        "link": {
+          "type": "string",
+          "index": "not_analyzed"
+        },
+        "mod_by": {
+          "type": "string",
+          "index": "no"
+        },
+        "mod_on": {
+          "type": "date",
+          "format": "dateOptionalTime",
+          "index": "no"
+        },
+        "off_site": {
+          "type": "string",
+          "index": "analyzed",
+          "analyzer": "english",
+          "fields": {
+            "std": {
+              "type": "string",
+              "analyzer": "standard"
+            },
+            "og": {
+              "type": "string",
+              "index": "not_analyzed"
+            }
+          }
+        },
+        "on_site": {
+          "type": "string",
+          "index": "analyzed",
+          "analyzer": "english",
+          "fields": {
+            "std": {
+              "type": "string",
+              "analyzer": "standard"
+            },
+            "og": {
+              "type": "string",
+              "index": "not_analyzed"
+            }
+          }
+        },
+        "phone": {
+          "type": "string",
+          "index": "not_analyzed"
+        },
+        "remarks": {
+          "type": "string",
+          "index": "analyzed",
+          "analyzer": "english",
+          "fields": {
+            "std": {
+              "type": "string",
+              "analyzer": "standard"
+            },
+            "og": {
+              "type": "string",
+              "index": "not_analyzed"
+            }
+          }
+        },
+        "retention": {
+          "type": "string",
+          "index": "analyzed"
+        },
+        "revision": {
+          "type": "string",
+          "index": "no"
+        },
+        "schedule_id": {
+          "type": "string",
+          "index": "no"
+        },
+        "status": {
+          "type": "string",
+          "index": "no"
+        },
+        "title": {
+          "type": "string",
+          "index": "analyzed",
+          "analyzer": "english",
+          "fields": {
+            "std": {
+              "type": "string",
+              "analyzer": "standard"
+            },
+            "og": {
+              "type": "string",
+              "index": "not_analyzed"
+            }
+          }
+        },
+        "website": {
+          "type": "string",
+          "index": "not_analyzed"
+        }
+      }
+    }
+  }
+}
