@@ -1,15 +1,16 @@
 var request = require('request');
 
+var ES_SERVER = 'http://localhost:9200/index_of_records/';
+
 function setup(app) {
-  app.post('/search', getSearch);
+  app.put('/search', getSearch);
 }
 
 function getSearch(req, res){
-  var terms = req.body;
-  console.log(terms[0]);
+  var body = req.body;
   var query = '{"query": { \
                   "multi_match": { \
-                        "query":"{search_term}", \
+                        "query":"{search_terms}", \
                         "type": "most_fields", \
                         "fields": [ "title^10", \
                                     "department^9", \
@@ -54,16 +55,15 @@ function getSearch(req, res){
                   } \
                 }';
 
-  var query = query.replace('{search_term}', terms);
-  res.send(query);
+  var query = query.replace('{search_terms}', body.terms);
 
-  var request = require('request');
-  request('http://www.google.com', function (error, response, body) {
-  if (!error && response.statusCode == 200) {
-    console.log(body) // Print the google web page.
-  }
-})
-
+  request.post({
+    url:ES_SERVER + 'record_types/_search',
+    form: query},
+    function(err,httpResponse,body){
+      if (err){res.send(err);}
+      res.send(body);
+  })
 }
 
 module.exports = setup;
