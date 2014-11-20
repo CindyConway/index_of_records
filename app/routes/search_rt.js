@@ -7,8 +7,10 @@ function setup(app) {
 }
 
 function getSearch(req, res){
-  var body = req.body;
-  var query = '{"query": { \
+ var body = req.body;
+
+  var query = '{"size":100, \
+                "query": { \
                   "multi_match": { \
                         "query":"{search_terms}", \
                         "type": "most_fields", \
