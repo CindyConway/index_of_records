@@ -1,0 +1,16 @@
+/********************************
+  copy and past into mongo shell
+*********************************/
+
+// First Command
+config = { _id: "m101", members:[
+          { _id : 0, host : "localhost:27017"},
+          { _id : 1, host : "localhost:27018"},
+          { _id : 2, host : "localhost:27019"} ]
+         };
+
+
+
+
+// Second Command (might need to me rs.reconfig instead of rs.initiate not new install)
+rs.initiate(config);
