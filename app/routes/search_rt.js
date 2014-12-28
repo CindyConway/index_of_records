@@ -10,10 +10,10 @@ function getSearch(req, res){
   var body = req.body;
 
   //create array of fields to search
-  var search_fields = [ "title^10"];
-  search_fields.push("department^9");
+  var search_fields = [ "title"];
+  search_fields.push("department");
   search_fields.push("division");
-  search_fields.push("category^5");
+  search_fields.push("category");
   search_fields.push("retention");
   search_fields.push("remarks");
   search_fields.push("on_site");
@@ -91,19 +91,28 @@ function getSearch(req, res){
   queryObj.aggs.retention["terms"] = {};
   queryObj.aggs.retention.terms["field"] = "retention.og";
 
+//if nothing is returned, suggest terms
+  queryObj["suggest"] = {};
+  queryObj.suggest["general"] = {}
+  queryObj.suggest.general["text"] = body.criteria.terms;
+  queryObj.suggest.general["term"] = {};
+  queryObj.suggest.general.term["field"] =  "_all";
+  queryObj.suggest.general.term["suggest_mode"] =  "missing";
+  queryObj.suggest.general.term["size"] =  2;
 
   if(Object.keys(body.filters).length != 0){
 
     // This filter will limit the search results, but the filters do not change
     queryObj["post_filter"] = {};
-    queryObj.post_filter["and"] = [];
+    queryObj.post_filter["bool"]= {};
+    queryObj.post_filter.bool["must"] = [];
 
     var filters = body.filters;
     for (var item in filters){
       obj = {};
       obj.terms = {};
       obj.terms[item] = filters[item];
-      queryObj.post_filter.and.push(obj);
+      queryObj.post_filter.bool.must.push(obj);
     }
 
     // FILTER RESULTS **AND** FITLERS - User may ask me to do this instead
@@ -121,7 +130,7 @@ function getSearch(req, res){
  }
 
   var queryString = JSON.stringify(queryObj, undefined, 0);
-
+  //console.log(JSON.stringify(queryObj, undefined, 2));
   request.post({
     url:ES_SERVER + 'record_types/_search',
     form: queryString},
