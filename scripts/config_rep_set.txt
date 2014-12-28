@@ -12,5 +12,5 @@ config = { _id: "m101", members:[
 
 
 
-// Second Command (might need to me rs.reconfig instead of rs.initiate not new install)
+// Second Command (might need to be rs.reconfig instead of rs.initiate not new install)
 rs.initiate(config);
