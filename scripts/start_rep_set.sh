@@ -18,5 +18,10 @@ mongod --replSet m101 --logpath "/data/3.log" --dbpath /data/rs3 --port 27019 --
 
 
 for first connection, PRIMARY must be on port 27017
-
-***********************************/
+Use this to set which replica is the primary. EXECUTE ONE CMD AT A TIME
+cfg = rs.conf()
+cfg.members[0].priority = 1
+cfg.members[1].priority = 0.5
+cfg.members[2].priority = 0.5
+rs.reconfig(cfg)
+*******************************/
