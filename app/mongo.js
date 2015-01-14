@@ -3,9 +3,9 @@ var mongodb = require('mongodb');
 module.exports.init = function(callback) {
 
 
-  var server = new mongodb.Server("ADD_IP_HERE", ADD_PORT_HERE, {});
+  var server = new mongodb.Server("127.0.0.1", 27017, {});
 
-  new mongodb.Db('ADD_DB_NAME_HERE', server, {
+  new mongodb.Db('index_of_records', server, {
     w: 1
   }).open(function(error, client) {
 

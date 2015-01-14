@@ -33,10 +33,10 @@ mongo.init(function (error) {
   if (error)
     console.log( error);
 
-  app.listen(ADD_PORT); //database is initialized, ready to listen for connections
+  app.listen(1971); //database is initialized, ready to listen for connections
 });
 
-var port = process.env.PORT || ADD_PORT;    // set our port
+var port = process.env.PORT || 1971;    // set our port
 
 module.exports = app;
 
