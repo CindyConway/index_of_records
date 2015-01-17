@@ -1,52 +1,79 @@
 var phantom = require('phantom');
 
-//phantom.create(function (ph) {
-//  ph.createPage(function (page) {
-//    var size = {};
-//    size.format = "legal";
-//    size.orientation = "landscape";
-//    size.margin = "1cm";
-//
-//    var footer = {};
-//      footer.contents="this is a test";
-//
-//    console.log(size);
-//    page.set('paperSize',size, function() {
-//      // continue with page setup
-//    });
-//    page.set('footer',footer, function() {
-//      // continue with page setup
-//    });
-//    page.open("http://10.250.60.109/cindy/sunshine/build/#/schedule", function start(status) {
-//      console.log(status);
-//      var fileName = 'test_' +  Math.floor((Math.random() * 100) + 1) + '.pdf';
-//      page.render(fileName, function() {
-//        // file is now written to disk
-//      });
-//      ph.exit();
-//    });
-//  });
-//});
-
-
 phantom.create(function (ph) {
   ph.createPage(function (page) {
-    page.open("http://10.250.60.109/cindy/sunshine/build/#/schedule", function (status) {
 
+    page.open("http://localhost/~cindy/sunshine/build/#/schedule", function (status) {
+      var self = this;
+      self.gen_dt = null;
       var paperConfig = {
         format: 'legal',
         orientation: 'landscape',
-        border: '1cm',
+        margin:'0.75cm',
         header: {
-          height: '1cm',
+          height: "2cm",
           contents: ph.callback(function(pageNum, numPages) {
-            return '<h1>My Custom Header</h1>';
+            if(pageNum == 1) {return;}
+            if(pageNum == numPages) {return;}
+
+            var style = '<style> \
+                          td{border: solid 1px #eee;}\
+                          table{table-layout:fixed; \
+                                width: 100%; \
+                                border:none; \
+                                border-collapse:collapse; \
+                                font-size:80%; \
+                                font-weight:bold; \
+                                font-family: "Raleway"; \
+                                margin:0px;} \
+                          tr{border-right: 1px solid #eee;} \
+                          .center {text-align: center;} \
+                          .p1{padding:1em;} \
+                          .grey-background {background: #f2f2f2 !important; border-top: 1px solid #d7d7d7 } \
+                          body{margin:0px;} \
+                        </style>'
+            var header = '<table> \
+                      <tr> \
+                      <td class="p1">Division</td> \
+                      <td class="p1">Division Contract</td> \
+                      <td class="p1">Record Category</td> \
+                      <td class="p1">Record Title/ Description</td> \
+                      <td class="p1">Document Link</td> \
+                      <td class="p1">Retention Category</td> \
+                      <td class="p1 center"colspan="3">Retention Period</td> \
+                      <td class="p1">Remarks</td> \
+                      </tr> \
+                      <tr class="grey-background"> \
+                      <td></td> \
+                      <td></td> \
+                      <td></td> \
+                      <td></td> \
+                      <td></td> \
+                      <td></td> \
+                      <td>Total</td> \
+                      <td>On-site</td> \
+                      <td>Off-site</td> \
+                      <td></td> \
+                      </tr>\
+                      </table>'
+
+            return style+header;
           })
         },
         footer: {
           height: '1cm',
           contents: ph.callback(function(pageNum, numPages) {
-            return '<p>Page ' + pageNum + ' / ' + numPages + '</p>';
+            if(self.gen_dt == null){
+              var months = ['01','02','03','04','05','06','07','08','09','10','11','12'];
+              var today = new Date();
+              var date = today.getDate();
+              var month = months[today.getMonth()];
+              var year = today.getFullYear();
+              self.gen_dt = month + '/' + date + '/' + year;
+            }
+            var footer = '<span style="float:left">Page ' + pageNum + ' / ' + numPages + '</span>';
+               footer = footer + '<span style="float:right"> Generated on: ' + self.gen_dt + '</span>';
+            return footer;
           })
         }
       };
@@ -58,7 +85,8 @@ phantom.create(function (ph) {
           ph.exit();
         });
       });
+
+
     });
   });
 });
-
