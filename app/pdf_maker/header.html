@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html>
+  <body onload="subst()">
+    <table id="FakeHeader">
+       <tr> 
+        <td class="p1 tiny">Division</td> 
+        <td class="p1 tiny">Division Contract</td> 
+        <td class="p1 tiny">Record Category</td> 
+        <td class="p1 tiny">Record Title Description</td> 
+        <td class="p1 tiny">Document Link</td> 
+        <td class="p1 tiny">Retention Category</td> 
+        <td class="p1 tiny center"colspan="3">Retention Period</td> 
+        <td class="p1 tiny">Remarks</td> 
+      </tr> 
+      </tr> 
+      <tr class="grey-bar"> 
+        <td></td> 
+        <td></td> 
+        <td></td> 
+        <td></td> 
+        <td></td> 
+        <td></td> 
+        <td class="tiny">Total</td> 
+        <td class="tiny">On-site</td> 
+        <td class="tiny">Off-site</td> 
+        <td></td> 
+      </tr> 
+    </table>
+  </body>
+
+<script>
+function subst() {
+  var vars={};
+  var x=document.location.search.substring(1).split('&');
+  for (var i in x) {var z=x[i].split('=',2);vars[z[0]] = unescape(z[1]);}
+  var x=['frompage','topage','page','webpage','section','subsection','subsubsection'];
+  for (var i in x) {
+    var y = document.getElementsByClassName(x[i]);
+    for (var j=0; j<y.length; ++j) y[j].textContent = vars[x[i]];
+
+    if(vars['page'] == 1){ // If page is 1, set FakeHeaders display to none
+       document.getElementById("FakeHeader").style.display = 'none';
+    };
+
+    if(vars['page'] == vars['topage']){ // If page is 1, set FakeHeaders display to none
+       document.getElementById("FakeHeader").style.display = 'none';
+    };
+  }
+}
+</script>
+<style type="text/css"> 
+  td{border: solid 1px #eee;}
+  table{table-layout:fixed; 
+        width: 100%; 
+        border:none; 
+        border-collapse:collapse; 
+        font-size:80%; 
+        font-weight:bold; 
+        font-family: "Raleway"; 
+        margin:0px;} 
+  tr{border-right: 1px solid #eee;} 
+  body{margin:0px;border:0;} 
+  .center {text-align: center;} 
+  .p1{padding:1em;} 
+  .tiny{font-size:60%;} 
+  .raleway{font-family: "Raleway"} 
+  .grey-bar {background-color:rgba(242, 242, 242, 0.4) !important; border-top: 1px solid #d7d7d7;}
+</style>
+
+<html>
+

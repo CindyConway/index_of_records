@@ -13,7 +13,8 @@
     "phantom": "^0.7.2",
     "phantomjs": "^1.9.13",
     "request": "^2.48.0",
-    "util": "^0.10.3"
+    "util": "^0.10.3",
+    "wkhtmltopdf": "^0.1.5"
   },
   "scripts": {
     "start": "node server.js"
