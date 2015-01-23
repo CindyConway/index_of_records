@@ -9,8 +9,7 @@ config.footerRight = 'Generated on: [date]';
 config.marginTop = '17mm';
 config.marginBottom = '10mm';
 
-config.headerHtml = 'file:///Users/cindy/Projects/index_of_records/app/pdf_maker/header.html';
+config.headerHtml = 'file:///var/www/html/index_of_records/app/pdf_maker/header.html';
 
-console.log(config);
-wkhtmltopdf('http://localhost/~cindy/sunshine/build/#/schedule', config)
+wkhtmltopdf('http://10.250.60.109/cindy/sunshine/build/#/schedule', config)
   .pipe(fs.createWriteStream('DPH.pdf'));
