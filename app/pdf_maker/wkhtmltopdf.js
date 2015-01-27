@@ -11,5 +11,5 @@ config.marginBottom = '10mm';
 
 config.headerHtml = 'file:///var/www/html/index_of_records/app/pdf_maker/header.html';
 
-wkhtmltopdf('http://10.250.60.109/cindy/sunshine/build/#/schedule', config)
+wkhtmltopdf('http://localhost/~cindy/sunshine/build/#/schedule', config)
   .pipe(fs.createWriteStream('DPH.pdf'));
