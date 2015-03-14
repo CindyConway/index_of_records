@@ -13,6 +13,31 @@ function setup(app) {
   app.put('/draft/record', updateRecord); // used put instead of post because it is idempotent
   app.post('/publish/:schedule_id', publishSchedule);
   app.get('/draft/schedule/:schedule_id', getDraftScheduleById);
+  app.delete('/draft/record/:record_id/:department_id', deleteRecord);
+}
+
+function deleteRecord(req,res){
+
+  var objectId = mongo.toObjectId(req.params.record_id);
+  var deptObjectId = mongo.toObjectId(req.params.department_id);
+
+  mongo.schedules.update(
+    {
+        "_id": deptObjectId
+    },
+    {
+        $pull:{
+          "draft.record":{
+              _id : objectId
+            }
+        }
+    },
+    function(err, result) {
+      if (err) res.send("err " + err);
+      res.send({
+        "status": "deleted"
+      });
+    });
 }
 
 function publishSchedule(req, res) {
@@ -84,56 +109,85 @@ function publishSchedule(req, res) {
 }
 
 function updateRecord(req, res){
-  var objectId = mongo.toObjectId(req.body._id);
 
-  mongo.schedules.update({
-      "draft.record._id": objectId
-    }, {
-      "$set": {
-        "draft.record.$.title": req.body.title,
-        "draft.record.$.link": req.body.link,
-        "draft.record.$.category": req.body.category,
-        "draft.record.$.retention": req.body.retention,
-        "draft.record.$.on_site": req.body.on_site,
-        "draft.record.$.off_site": req.body.off_site,
-        "draft.record.$.total": req.body.total,
-        "draft.record.$.division": req.body.division,
-        "draft.record.$.business_unit": req.body.business_unit,
-        "draft.record.$.remarks": req.body.remarks,
-        "draft.record.$.status": "DIRTY"
-      }
-    }, {
-      w: 1
-    },
+  var whereClause = {};
+  var updateObject = {};
+
+  //[=================== PREP OBJECT FOR UPDATE ==========================]
+  if(req.body._id != null){
+    var objectId = mongo.toObjectId(req.body._id);
+
+    whereClause = {
+        "draft.record._id": objectId
+      };
+
+    updateObject = {
+                    "$set": {
+                      "draft.record.$.title": req.body.title,
+                      "draft.record.$.link": req.body.link,
+                      "draft.record.$.category": req.body.category,
+                      "draft.record.$.retention": req.body.retention,
+                      "draft.record.$.on_site": req.body.on_site,
+                      "draft.record.$.off_site": req.body.off_site,
+                      "draft.record.$.total": req.body.total,
+                      "draft.record.$.division": req.body.division,
+                      "draft.record.$.business_unit": req.body.business_unit,
+                      "draft.record.$.remarks": req.body.remarks,
+                      "draft.record.$.status": "DIRTY"
+                    }
+                  };
+  }
+
+
+  //[================== PREP OBJECTS FOR INSERT ======================]
+  if(req.body._id == null){
+    var deptObjectId = mongo.toObjectId(req.body.dept_id);
+    var objectId = mongo.newObjectId();
+
+    whereClause = {
+        "_id": deptObjectId
+      };
+
+      updateObject = {
+                      $push: {
+                          "draft.record":{
+                              _id: objectId,
+                              title: req.body.title,
+                              link: req.body.link,
+                              category: req.body.category,
+                              retention: req.body.retention,
+                              on_site: req.body.on_site,
+                              off_site: req.body.off_site,
+                              total: req.body.total,
+                              division: req.body.division,
+                              business_unit: req.body.business_unit,
+                              remarks: req.body.remarks,
+                              status: "DIRTY"
+                            }
+
+                      }
+
+                    };
+  }
+
+
+  //[============= MAKE MONGODB CALL =================================]
+
+  mongo.schedules.update(
+    whereClause
+    ,
+    updateObject
+    , {},
     function(err, result) {
       if (err) res.send("err " + err);
-
       res.send({
-        "updated": "done"
+        "record_id": objectId
       });
     });
 
   }
 
-/*** NOT THIS ONE *****/
-function addRecordClass(req, res){
-
-    // Draft.findById(req.params.schedule_id, function(err, draft) {
-    //     if (err){
-    //         res.send(err);
-    //     }else{
-    //         draft.record.push({title: 'Cindy super test2', division:'Poobah Lodge2', on_site:'1', off_site:'2', total:'0', retention:'4 - No Retention', category:'my cat', mod_by:'cindy'});
-    //
-    //         draft.save(function (err) {
-    //             if (!err) console.log('Success!');
-    //             if(err) console.log(err);
-    //         });
-    //     }
-    // });
-}
-
 function getAdoptedScheduleById(req, res) {
-
   var objectId = mongo.toObjectId(req.params.schedule_id);
 
   mongo.schedules
