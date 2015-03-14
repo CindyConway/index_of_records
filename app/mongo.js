@@ -17,6 +17,10 @@ module.exports.init = function(callback) {
       return mongodb.ObjectID.createFromHexString(hexString);
     };
 
+    module.exports.newObjectId = function() {
+      return mongodb.ObjectID();
+    };
+
     //TO DO
     //Need error handling
   });

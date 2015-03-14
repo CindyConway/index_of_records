@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<!-- saved from url=(0037)http://html5demos.com/contenteditable -->
+<html lang="en"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta charset="utf-8">
+<meta name="viewport" content="width=620">
+<title>HTML5 Demo: ContentEditable</title>
+<link rel="stylesheet" href="http://html5demos.com/css/html5demos.css">
+<script type="text/javascript" async="" src="./HTML5 Demo  ContentEditable_files/azcarbon_2_1_0_VERT"></script><script src="./HTML5 Demo  ContentEditable_files/h5utils.js"></script><script id="_carbonads_projs" type="text/javascript" src="./HTML5 Demo  ContentEditable_files/C6AILKT.json"></script><style>.carbonad{background-color:#FBFBFB;border:2px solid #E8E8E8;height:215px;line-height:1.2;width:150px}.carbonad-img{float:left;height:100px;margin-left:11px;margin-top:11px;width:130px}.carbonad-text{color:#545454;float:left;font-family:Arial,Helvetica,sans-serif;font-size:11px;font-weight:400;height:50px;margin-left:15px;margin-top:9px;width:119px}.carbonad-text a{color:#545454;text-decoration:none;text-transform:none;}.carbonad-tag{color:#999;float:left;font-family:Arial,Helvetica,sans-serif;font-size:11px;font-weight:400;margin-left:17px;margin-top:15px;padding-top:5px}.carbonad-tag a{color:#999;text-align:center;text-decoration:none;font-weight:700}</style></head>
+<body cz-shortcut-listen="true">
+<section id="wrapper">
+<div id="carbonads-container"><div class="carbonad"><div id="azcarbon"><span><span class="carbonad-image"><a href="http://srv.carbonads.net/ads/click/x/GTND423LCVBIK53JCT74YKQWCV7DP53LF67ITZ3JCE7D62QICWYDCKJKC6BD6KJMCYADEK3EHJNCLSIZ?segment=placement:html5demoscom" target="_blank"><img width="130" height="100" border="0" src="./HTML5 Demo  ContentEditable_files/20235" class="carbonad-image carbonad-img"></a></span><span class="carbonad-text"><a href="http://srv.carbonads.net/ads/click/x/GTND423LCVBIK53JCT74YKQWCV7DP53LF67ITZ3JCE7D62QICWYDCKJKC6BD6KJMCYADEK3EHJNCLSIZ?segment=placement:html5demoscom">ruxit uses artificial intelligence to get to the root of issues much faster than a human can</a></span><span class="carbonad-tag">ads via <a href="http://carbonads.com/">Carbon</a></span></span></div><script type="text/javascript">var z = document.createElement("script"); z.type = "text/javascript"; z.async = true; z.src = "http://engine.carbonads.com/z/14060/azcarbon_2_1_0_VERT"; var s = document.getElementsByTagName("script")[0]; s.parentNode.insertBefore(z, s);</script></div></div>
+    <header>
+      <h1>ContentEditable</h1>
+    </header>
+
+<article>
+  <section>
+    <p>Any elements with the <code>contenteditable</code> attribute set will have a grey outline as you hover over. Feel free to edit and change their contents.  I'm using local storage to maintain your changes.</p>
+  </section>
+  <section id="editable" contenteditable="true">
+    <h2>Go ahead, edit away!</h2>
+    <p>Here's a typical paragraph element</p>
+    <ol>
+      <li>and now a list</li>
+      <li>U only</li>
+      <li>three items</li>
+    </ol>
+  </section>
+  <div>
+    <input type="button" id="clear" value="Clear changes">
+  </div>
+</article>
+<script>
+var editable = document.getElementById('editable');
+
+addEvent(editable, 'blur', function () {
+  // lame that we're hooking the blur event
+  localStorage.setItem('contenteditable', this.innerHTML);
+  document.designMode = 'off';
+});
+
+addEvent(editable, 'focus', function () {
+  document.designMode = 'on';
+});
+
+addEvent(document.getElementById('clear'), 'click', function () {
+  localStorage.clear();
+  window.location = window.location; // refresh
+});
+
+if (localStorage.getItem('contenteditable')) {
+  editable.innerHTML = localStorage.getItem('contenteditable');
+}
+
+</script><a id="html5badge" href="http://www.w3.org/html/logo/">
+<img src="./HTML5 Demo  ContentEditable_files/html5-badge-h-connectivity-device-graphics-multimedia-performance-semantics-storage.png" width="325" height="64" alt="HTML5 Powered with Connectivity / Realtime, Device Access, Graphics, 3D &amp; Effects, Multimedia, Performance &amp; Integration, Semantics, and Offline &amp; Storage" title="HTML5 Powered with Connectivity / Realtime, Device Access, Graphics, 3D &amp; Effects, Multimedia, Performance &amp; Integration, Semantics, and Offline &amp; Storage">
+</a>
+    <footer><a href="http://html5demos.com/">HTML5 demos</a>/<a id="built" href="http://twitter.com/rem">@rem built this</a>/<a href="http://html5demos.com/contenteditable#view-source">view source</a></footer> 
+</section>
+<a href="http://github.com/remy/html5demos"><img style="position: absolute; top: 0; left: 0; border: 0;" src="./HTML5 Demo  ContentEditable_files/forkme_left_darkblue_121621.png" alt="Fork me on GitHub"></a>
+<script src="./HTML5 Demo  ContentEditable_files/prettify.packed.js"></script>
+<script>
+var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
+document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
+</script><script src="./HTML5 Demo  ContentEditable_files/ga.js" type="text/javascript"></script>
+<script>
+try {
+var pageTracker = _gat._getTracker("UA-1656750-18");
+pageTracker._trackPageview();
+} catch(err) {}</script>
+
+
+<div id="window-resizer-tooltip"><a href="http://html5demos.com/contenteditable#" title="Edit settings"></a><span class="tooltipTitle">Window size: </span><span class="tooltipWidth" id="winWidth"></span> x <span class="tooltipHeight" id="winHeight"></span><br><span class="tooltipTitle">Viewport size: </span><span class="tooltipWidth" id="vpWidth"></span> x <span class="tooltipHeight" id="vpHeight"></span></div></body></html>
