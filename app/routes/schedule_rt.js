@@ -112,10 +112,19 @@ function updateRecord(req, res){
 
   var whereClause = {};
   var updateObject = {};
+  var record = req.body;
+  var is_template;
+
+
+  if (record.hasOwnProperty("is_template")){
+    is_template = record.is_template;
+  }else{
+    is_template = false;
+  }
 
   //[=================== PREP OBJECT FOR UPDATE ==========================]
-  if(req.body._id != null){
-    var objectId = mongo.toObjectId(req.body._id);
+  if(record._id != null && !is_template){
+    var objectId = mongo.toObjectId(record._id);
 
     whereClause = {
         "draft.record._id": objectId
@@ -123,16 +132,17 @@ function updateRecord(req, res){
 
     updateObject = {
                     "$set": {
-                      "draft.record.$.title": req.body.title,
-                      "draft.record.$.link": req.body.link,
-                      "draft.record.$.category": req.body.category,
-                      "draft.record.$.retention": req.body.retention,
-                      "draft.record.$.on_site": req.body.on_site,
-                      "draft.record.$.off_site": req.body.off_site,
-                      "draft.record.$.total": req.body.total,
-                      "draft.record.$.division": req.body.division,
-                      "draft.record.$.business_unit": req.body.business_unit,
-                      "draft.record.$.remarks": req.body.remarks,
+                      "draft.record.$.title": record.title,
+                      "draft.record.$.link": record.link,
+                      "draft.record.$.category": record.category,
+                      "draft.record.$.retention": record.retention,
+                      "draft.record.$.on_site": record.on_site,
+                      "draft.record.$.off_site": record.off_site,
+                      "draft.record.$.total": record.total,
+                      "draft.record.$.division": record.division,
+                      "draft.record.$.business_unit": record.business_unit,
+                      "draft.record.$.remarks": record.remarks,
+                      "draft.record.$.is_template": is_template,
                       "draft.record.$.status": "DIRTY"
                     }
                   };
@@ -140,9 +150,16 @@ function updateRecord(req, res){
 
 
   //[================== PREP OBJECTS FOR INSERT ======================]
-  if(req.body._id == null){
-    var deptObjectId = mongo.toObjectId(req.body.dept_id);
-    var objectId = mongo.newObjectId();
+  if((record._id == null) || (is_template)){
+    var deptObjectId = mongo.toObjectId(record.dept_id);
+
+    if(is_template){
+      var objectId = mongo.toObjectId(record._id);
+    }
+
+    if(!is_template){
+      var objectId = mongo.newObjectId();
+    }
 
     whereClause = {
         "_id": deptObjectId
@@ -151,18 +168,19 @@ function updateRecord(req, res){
       updateObject = {
                       $push: {
                           "draft.record":{
-                              _id: objectId,
-                              title: req.body.title,
-                              link: req.body.link,
-                              category: req.body.category,
-                              retention: req.body.retention,
-                              on_site: req.body.on_site,
-                              off_site: req.body.off_site,
-                              total: req.body.total,
-                              division: req.body.division,
-                              business_unit: req.body.business_unit,
-                              remarks: req.body.remarks,
-                              status: "DIRTY"
+                              "_id": objectId,
+                              "title": record.title,
+                              "link": record.link,
+                              "category": record.category,
+                              "retention": record.retention,
+                              "on_site": record.on_site,
+                              "off_site": record.off_site,
+                              "total": record.total,
+                              "division": record.division,
+                              "business_unit": record.business_unit,
+                              "remarks": record.remarks,
+                              "is_template": is_template,
+                              "status": "DIRTY"
                             }
 
                       }
@@ -214,15 +232,19 @@ function getDraftScheduleById(req, res) {
     .find({
       _id: objectId
     }, {
-      draft: 1
-    }, {
-      sort: "draft.record.category"
+      "draft": 1
     })
     .toArray(function(err, doc) {
       if (err)
         console.log(err);
 
       if (doc.length > 0) {
+        doc[0].draft.record.sort(
+          firstBy(mongo.sorter("division"))
+          .thenBy(mongo.sorter("category"))
+          .thenBy(mongo.sorter("title"))
+        );
+
         res.send(doc[0]);
       } else {
         res.send({});
@@ -230,5 +252,4 @@ function getDraftScheduleById(req, res) {
 
     });
 }
-
 module.exports = setup;

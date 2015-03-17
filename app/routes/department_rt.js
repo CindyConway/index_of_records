@@ -4,6 +4,7 @@ function setup(app) {
 
   app.get('/draft/department', getDraftDepartment);
   app.get('/department', getAdoptedDepartment);
+  app.put('/draft/department', updateDraftDepartment);
 }
 
 function getAdoptedDepartment(req, res) {
@@ -29,6 +30,32 @@ function getDraftDepartment(req, res) {
         console.log(err);
 
       res.send(doc);
+    });
+}
+
+function updateDraftDepartment(req, res){
+  var objectId = mongo.toObjectId(req.body.sched_id);
+  var dept = req.body;
+  mongo.schedules.update(
+    {
+      "_id": objectId
+    }
+    ,
+    {
+      $set:{
+          "draft.department": dept.department,
+          "draft.website": dept.website,
+          "draft.contact": dept.contact,
+          "draft.email": dept.email,
+          "draft.phone": dept.phone,
+          "draft.ratified_on": dept.ratified_on,
+          "draft.status":"DIRTY"
+        }
+    }
+    , {w:1},
+    function(err, result) {
+      if (err) res.send("err " + err);
+      res.send({"result": result});
     });
 }
 

@@ -2,15 +2,15 @@
 1 verbose cli [ '/usr/local/bin/node',
 1 verbose cli   '/usr/local/bin/npm',
 1 verbose cli   'install',
-1 verbose cli   'momentjs',
+1 verbose cli   'thenBy',
 1 verbose cli   '--save' ]
 2 info using npm@1.4.28
 3 info using node@v0.10.32
 4 warn package.json index_of_records@0.0.1 No README data
 5 warn package.json util@0.10.3 util is also the name of a node core module.
 6 verbose readDependencies using package.json deps
-7 verbose cache add [ 'momentjs', null ]
-8 verbose cache add name=undefined spec="momentjs" args=["momentjs",null]
+7 verbose cache add [ 'thenBy', null ]
+8 verbose cache add name=undefined spec="thenBy" args=["thenBy",null]
 9 verbose parsed url { protocol: null,
 9 verbose parsed url   slashes: null,
 9 verbose parsed url   auth: null,
@@ -20,29 +20,29 @@
 9 verbose parsed url   hash: null,
 9 verbose parsed url   search: null,
 9 verbose parsed url   query: null,
-9 verbose parsed url   pathname: 'momentjs',
-9 verbose parsed url   path: 'momentjs',
-9 verbose parsed url   href: 'momentjs' }
-10 silly lockFile 6617700a-momentjs momentjs
-11 verbose lock momentjs /Users/cindy/.npm/6617700a-momentjs.lock
-12 silly lockFile 6617700a-momentjs momentjs
-13 silly lockFile 6617700a-momentjs momentjs
-14 verbose addNamed [ 'momentjs', '' ]
+9 verbose parsed url   pathname: 'thenBy',
+9 verbose parsed url   path: 'thenBy',
+9 verbose parsed url   href: 'thenBy' }
+10 silly lockFile 583ea92b-thenBy thenBy
+11 verbose lock thenBy /Users/cindy/.npm/583ea92b-thenBy.lock
+12 silly lockFile 583ea92b-thenBy thenBy
+13 silly lockFile 583ea92b-thenBy thenBy
+14 verbose addNamed [ 'thenBy', '' ]
 15 verbose addNamed [ null, '*' ]
-16 silly lockFile 04d76c48-momentjs momentjs@
-17 verbose lock momentjs@ /Users/cindy/.npm/04d76c48-momentjs.lock
-18 silly addNameRange { name: 'momentjs', range: '*', hasData: false }
-19 verbose request where is /momentjs
+16 silly lockFile 80efc636-thenBy thenBy@
+17 verbose lock thenBy@ /Users/cindy/.npm/80efc636-thenBy.lock
+18 silly addNameRange { name: 'thenBy', range: '*', hasData: false }
+19 verbose request where is /thenBy
 20 verbose request registry https://registry.npmjs.org/
-21 verbose request id 8c08483f857d8564
-22 verbose url raw /momentjs
-23 verbose url resolving [ 'https://registry.npmjs.org/', './momentjs' ]
-24 verbose url resolved https://registry.npmjs.org/momentjs
-25 verbose request where is https://registry.npmjs.org/momentjs
-26 info trying registry request attempt 1 at 12:22:02
-27 http GET https://registry.npmjs.org/momentjs
-28 http 404 https://registry.npmjs.org/momentjs
-29 verbose headers { date: 'Fri, 16 Jan 2015 20:22:03 GMT',
+21 verbose request id 7353923fc349d796
+22 verbose url raw /thenBy
+23 verbose url resolving [ 'https://registry.npmjs.org/', './thenBy' ]
+24 verbose url resolved https://registry.npmjs.org/thenBy
+25 verbose request where is https://registry.npmjs.org/thenBy
+26 info trying registry request attempt 1 at 23:33:49
+27 http GET https://registry.npmjs.org/thenBy
+28 http 404 https://registry.npmjs.org/thenBy
+29 verbose headers { date: 'Mon, 16 Mar 2015 06:33:49 GMT',
 29 verbose headers   server: 'CouchDB/1.5.0 (Erlang OTP/R16B03)',
 29 verbose headers   'content-type': 'application/json',
 29 verbose headers   'cache-control': 'max-age=0',
@@ -50,14 +50,14 @@
 29 verbose headers   'accept-ranges': 'bytes',
 29 verbose headers   via: '1.1 varnish',
 29 verbose headers   age: '0',
-29 verbose headers   'x-served-by': 'cache-lax1433-LAX',
+29 verbose headers   'x-served-by': 'cache-sjc3132-SJC',
 29 verbose headers   'x-cache': 'MISS',
 29 verbose headers   'x-cache-hits': '0',
-29 verbose headers   'x-timer': 'S1421439722.828851,VS0,VE200',
+29 verbose headers   'x-timer': 'S1426487629.734454,VS0,VE34',
 29 verbose headers   'keep-alive': 'timeout=10, max=50',
 29 verbose headers   connection: 'Keep-Alive' }
 30 silly registry.get cb [ 404,
-30 silly registry.get   { date: 'Fri, 16 Jan 2015 20:22:03 GMT',
+30 silly registry.get   { date: 'Mon, 16 Mar 2015 06:33:49 GMT',
 30 silly registry.get     server: 'CouchDB/1.5.0 (Erlang OTP/R16B03)',
 30 silly registry.get     'content-type': 'application/json',
 30 silly registry.get     'cache-control': 'max-age=0',
@@ -65,24 +65,24 @@
 30 silly registry.get     'accept-ranges': 'bytes',
 30 silly registry.get     via: '1.1 varnish',
 30 silly registry.get     age: '0',
-30 silly registry.get     'x-served-by': 'cache-lax1433-LAX',
+30 silly registry.get     'x-served-by': 'cache-sjc3132-SJC',
 30 silly registry.get     'x-cache': 'MISS',
 30 silly registry.get     'x-cache-hits': '0',
-30 silly registry.get     'x-timer': 'S1421439722.828851,VS0,VE200',
+30 silly registry.get     'x-timer': 'S1426487629.734454,VS0,VE34',
 30 silly registry.get     'keep-alive': 'timeout=10, max=50',
 30 silly registry.get     connection: 'Keep-Alive' } ]
-31 silly lockFile 04d76c48-momentjs momentjs@
-32 silly lockFile 04d76c48-momentjs momentjs@
-33 error 404 404 Not Found: momentjs
+31 silly lockFile 80efc636-thenBy thenBy@
+32 silly lockFile 80efc636-thenBy thenBy@
+33 error 404 404 Not Found: thenBy
 33 error 404
-33 error 404 'momentjs' is not in the npm registry.
+33 error 404 'thenBy' is not in the npm registry.
 33 error 404 You should bug the author to publish it
 33 error 404 It was specified as a dependency of 'index_of_records'
 33 error 404
 33 error 404 Note that you can also install from a
 33 error 404 tarball, folder, or http url, or git url.
-34 error System Darwin 14.0.0
-35 error command "/usr/local/bin/node" "/usr/local/bin/npm" "install" "momentjs" "--save"
+34 error System Darwin 14.1.0
+35 error command "/usr/local/bin/node" "/usr/local/bin/npm" "install" "thenBy" "--save"
 36 error cwd /Users/cindy/Projects/index_of_records
 37 error node -v v0.10.32
 38 error npm -v 1.4.28
