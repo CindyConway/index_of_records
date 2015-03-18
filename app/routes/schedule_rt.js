@@ -53,7 +53,7 @@ function publishSchedule(req, res) {
       });
     }
 
-    //Make clone of adopted schedule for history collection
+    //Make clone of adopted schedule for history array
     jsonHistory = extend({}, document.adopted);
 
     //change the status of all the draft records to clean
@@ -70,7 +70,7 @@ function publishSchedule(req, res) {
     jsonAdopted.published_on = new Date();
     jsonAdopted.status = "SEND_TO_SEARCHABLE";
 
-    //remove the exiting adopted schedule
+    //remove the existing adopted schedule
     delete document.adopted;
 
     //add the current draft as the new version of the adopted schedule
@@ -79,7 +79,7 @@ function publishSchedule(req, res) {
     //update the draft's revision
     ++document.draft.revision;
 
-    //add to history array
+    //add history array if needed
     if (!document.hasOwnProperty('history')) {
       document.history = [];
     }
