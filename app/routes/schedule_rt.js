@@ -10,10 +10,60 @@ var extend = require('util')._extend;
 
 function setup(app) {
   app.get('/schedule/:schedule_id', getAdoptedScheduleById);
-  app.put('/draft/record', updateRecord); // used put instead of post because it is idempotent
-  app.post('/publish/:schedule_id', publishSchedule);
+  app.put('/draft/record', updateRecord);
+  app.post('/draft/publish/:schedule_id', publishSchedule);
+  app.post('/draft/lock/:schedule_id', lockSchedule);
+  app.post('/draft/unlock/:schedule_id', unlockSchedule);
   app.get('/draft/schedule/:schedule_id', getDraftScheduleById);
   app.delete('/draft/record/:record_id/:department_id', deleteRecord);
+}
+
+function generatePDF(req, res){
+
+}
+
+function lockSchedule(req, res){
+  var objectId = mongo.toObjectId(req.params.schedule_id);
+
+mongo.schedules.update(
+  {
+    _id: objectId
+  }
+  ,{
+    $set:{
+      "draft.status": "LOCKED"
+    }
+  }
+  , {},
+  function(err, result) {
+    if (err) res.send("err " + err);
+    res.send({
+
+    });
+  });
+
+}
+
+function unlockSchedule(req, res){
+  var objectId = mongo.toObjectId(req.params.schedule_id);
+
+  mongo.schedules.update(
+    {
+      _id: objectId
+    }
+    ,{
+      $set:{
+        "draft.status": "DIRTY"
+      }
+    }
+    , {},
+    function(err, result) {
+      if (err) res.send("err " + err);
+      res.send({
+
+      });
+    });
+
 }
 
 function deleteRecord(req,res){
@@ -34,9 +84,9 @@ function deleteRecord(req,res){
     },
     function(err, result) {
       if (err) res.send("err " + err);
-      res.send({
-        "status": "deleted"
-      });
+        res.send({
+          "status": "deleted"
+        });
     });
 }
 

@@ -1,3 +1,4 @@
+//RUN FROM NODE.JS
 var databaseUrl = "index_of_records"; // "username:password@example.com/mydb"
 var collections = ["schedules_draft", "schedules_adopted", "schedules"];
 var db = require("mongojs").connect(databaseUrl, collections);
