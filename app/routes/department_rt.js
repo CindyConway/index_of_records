@@ -3,12 +3,16 @@
 
 function setup(app) {
 
-  app.get('/draft/department', getDraftDepartment);
-  app.get('/department', getAdoptedDepartment);
-  app.put('/draft/department', updateDraftDepartment);
-  app.put('/draft/add', addDepartment);
-  app.delete('/draft/department/:department_id', archiveDepartment);
+  app.get('/v1/department', getAdoptedDepartment);
+
+  app.get('/v1/edit/department', getDraftDepartment);
+  app.put('/v1/edit/department', updateDraftDepartment);
+  app.put('/v1/edit/add', addDepartment);
+
+  app.delete('/v1/pub/department/:department_id', archiveDepartment);
+
 }
+
 
 function archiveDepartment(req, res){
   var objectId = mongo.toObjectId(req.params.department_id);
@@ -69,19 +73,15 @@ function archiveDepartment(req, res){
 
 function addDepartment(req, res){
   var draftId = mongo.newObjectId();
-  var adoptedId = mongo.newObjectId();
 
   mongo.schedules.insert(
     {
-      draft:{
+      "draft":{
           _id : draftId,
-          department: "new",
-          record:[]
-      },
-      adopted: {
-        _id: adoptedId,
-        department:null,
-        record:[]
+          "department": "new organization",
+          "revision":1,
+          "status": "DRAFT",
+          "record":[]
       }
     },
     function(err, doc){
@@ -93,7 +93,7 @@ function addDepartment(req, res){
 function getAdoptedDepartment(req, res) {
 
   mongo.schedules
-  .find({}, {"adopted.department":true},{"sort":"adopted.department"})
+  .find({"adopted":{"$exists":1}}, {"adopted.department":true},{"sort":"adopted.department"})
   .toArray(function(err, doc){
     if(err)
       console.log(err);
@@ -110,7 +110,6 @@ function getDraftDepartment(req, res) {
     .toArray(function(err, doc){
       if(err)
         console.log(err);
-
       res.send(doc);
     });
 }
@@ -137,7 +136,7 @@ function updateDraftDepartment(req, res){
     , {w:1},
     function(err, result) {
       if (err) res.send("err " + err);
-      res.send({"result": result});
+        res.send({"result": result});
     });
 }
 
