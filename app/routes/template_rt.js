@@ -1,12 +1,13 @@
 var mongo = require('../mongo.js');
+var extend = require('util')._extend;
 
 function setup(app) {
 
-  app.get('/template', getTemplate);
-  app.get('/template/:dept_id', getTemplateByDept);
-  app.put('/template', upsertTemplateRecord);
-  app.delete('/template/:record_id', deleteTemplateRecord);
-
+  app.get('/v1/pub/template', getTemplate);
+  app.put('/v1/pub/template', upsertTemplateRecord);
+  app.delete('/v1/pub/template/:record_id', deleteTemplateRecord);
+  app.get('/v1/edit/template/:dept_id', getTemplateByDept);
+  
 }
 
 function getTemplateByDept(req, res) {
@@ -29,8 +30,10 @@ function getTemplateByDept(req, res) {
 
       // get all the template records
       mongo.template
-        .find({}
-          ,{
+        .find({
+            "is_visible": "Visible"
+          },
+          {
             sort:
               [["category",1],
               ["title",1]]
@@ -39,6 +42,7 @@ function getTemplateByDept(req, res) {
           if (err)
             console.log(err);
 
+            var templateClone = extend([], template);
 
             if(schedule.length == 0){
               schedule = [];
@@ -48,19 +52,52 @@ function getTemplateByDept(req, res) {
               schedule = draft_schedule[0].draft.record;
             }
 
-            // add selected property if record exists in the schdule
-           for(var i=0; i <= template.length - 1;i++ ){
-               template[i]["selected"] = false;
-               var temp_id = template[i]._id.toString();
 
-               for(var y=0; y <= schedule.length - 1; y++){
-                  if(temp_id == schedule[y]._id.toString()){
-                    template[i]["selected"] = true;
-                    continue;
-                  }
+            //mark as selected any template records already in the schedule
+           for(var i = 0; i < schedule.length; i++){
+             if(!schedule[i].is_template){
+               continue;
+             }
+
+             for(var j = 0; j < template.length; j++){
+
+               if(schedule[i]._id.toString() == template[j]._id.toString()){
+                 templateClone[j]["selected"] = true;
                }
+             }
            }
-          res.send(template);
+
+           //add any templates that are still in the schedule but no longer in the master template list
+           for(var x = 0; x < schedule.length; x++){
+             if(!schedule[x].is_template){
+               continue;
+             }
+
+             var exists = false;
+             for(var y = 0; y < template.length; y++){
+               if(schedule[x]._id.toString() == template[y]._id.toString()){
+                 exists = true;
+               }
+             }
+
+             if(!exists){
+               var record = extend({}, schedule[x]);
+               record["selected"] = true;
+               templateClone.push(record);
+             }
+           }
+
+          //Add the selected attribute for any unselected template records
+           for(var k = 0 ; k < templateClone.length; k++){
+             if(!templateClone[k].hasOwnProperty("selected")){
+               templateClone[k]["selected"] = false;
+             }
+           }
+
+
+           console.log(templateClone);
+           //console.log(template);
+          res.send(templateClone);
 
         });
     });
@@ -109,7 +146,8 @@ function upsertTemplateRecord(req, res) {
       "off_site": record.off_site,
       "total" : record.total,
       "remarks" : record.remarks,
-      "is_template": true
+      "is_template": true,
+      "is_visible": record.is_visible
 
     },
     {

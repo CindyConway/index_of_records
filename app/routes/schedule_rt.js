@@ -9,13 +9,16 @@ var mongo = require('../mongo.js');
 var extend = require('util')._extend;
 
 function setup(app) {
-  app.get('/schedule/:schedule_id', getAdoptedScheduleById);
-  app.put('/draft/record', updateRecord);
-  app.post('/draft/publish/:schedule_id', publishSchedule);
-  app.post('/draft/lock/:schedule_id', lockSchedule);
-  app.post('/draft/unlock/:schedule_id', unlockSchedule);
-  app.get('/draft/schedule/:schedule_id', getDraftScheduleById);
-  app.delete('/draft/record/:record_id/:department_id', deleteRecord);
+  app.get('/v1/schedule/:schedule_id', getAdoptedScheduleById);
+
+  app.put('/v1/edit/record', updateRecord);
+  app.get('/v1/edit/schedule/:schedule_id', getDraftScheduleById);
+  app.delete('/v1/edit/record/:record_id/:department_id', deleteRecord);
+  app.post('/v1/edit/lock/:schedule_id', lockSchedule);
+
+  app.post('/v1/pub/publish/:schedule_id', publishSchedule);
+  app.post('/v1/pub/unlock/:schedule_id', unlockSchedule);
+
 }
 
 function generatePDF(req, res){

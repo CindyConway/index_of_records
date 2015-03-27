@@ -3,7 +3,7 @@ var request = require('request');
 var ES_SERVER = 'http://localhost:9200/index_of_records/';
 
 function setup(app) {
-  app.put('/search', getSearch);
+  app.put('/v1/search', getSearch);
 }
 
 function getSearch(req, res){

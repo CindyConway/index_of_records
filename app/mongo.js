@@ -13,6 +13,7 @@ module.exports.init = function(callback) {
 
     module.exports.schedules = new mongodb.Collection(client, 'schedules');
     module.exports.template = new mongodb.Collection(client, 'template');
+    module.exports.users = new mongodb.Collection(client, 'users');
 
     module.exports.toObjectId = function(hexString) {
       return mongodb.ObjectID.createFromHexString(hexString);

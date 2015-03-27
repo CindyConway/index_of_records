@@ -4,7 +4,7 @@ var mongo       = require('../mongo.js');
 
 
 function setup(app) {
-  app.get('/pdf/:schedule_id', generatePDF);
+  app.get('/v1/edit/pdf/:schedule_id', generatePDF);
 }
 
 function getDraftDepartmentName(dept_id, callback){

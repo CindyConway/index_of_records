@@ -3,11 +3,14 @@
 
 function setup(app) {
 
-  app.get('/draft/department', getDraftDepartment);
-  app.get('/department', getAdoptedDepartment);
-  app.put('/draft/department', updateDraftDepartment);
-  app.put('/draft/add', addDepartment);
-  app.delete('/draft/department/:department_id', archiveDepartment);
+  app.get('/v1/department', getAdoptedDepartment);
+
+  app.get('/v1/edit/department', getDraftDepartment);
+  app.put('/v1/edit/department', updateDraftDepartment);
+  app.put('/v1/edit/add', addDepartment);
+
+  app.delete('/v1/pub/department/:department_id', archiveDepartment);
+
 }
 
 
@@ -107,7 +110,6 @@ function getDraftDepartment(req, res) {
     .toArray(function(err, doc){
       if(err)
         console.log(err);
-
       res.send(doc);
     });
 }
