@@ -1,34 +1,43 @@
-// if I call find().Array( callback(err, result)) as a chain, I cannot operate on each document that
-// matched the find query because the callback is initiated after the entier cursor ( in the form
-//of an array) is retutned. HOWEVER, if I creat the cursor in a separate step, I can execure a callback
-// on each document eg var cursor = db.collecttion.find({query}); cursor.each(function(err, doc){})
-// review week2 NodeJS Driver: find, findOne and cursor
-
-
 var mongo = require('../mongo.js');
 var extend = require('util')._extend;
+var dept_auth = require('../private/auth.js').dept_auth;
+var validateUser = require('../private/auth.js').validateUser;
+
 
 function setup(app) {
-  app.get('/v1/schedule/:schedule_id', getAdoptedScheduleById);
+  app.get('/v1/schedule/:dept_id', getAdoptedScheduleById);
 
   app.put('/v1/edit/record', updateRecord);
-  app.get('/v1/edit/schedule/:schedule_id', getDraftScheduleById);
-  app.delete('/v1/edit/record/:record_id/:department_id', deleteRecord);
-  app.post('/v1/edit/lock/:schedule_id', lockSchedule);
+  app.get('/v1/edit/schedule/:dept_id', getDraftScheduleById);
+  app.delete('/v1/edit/record/:record_id/:dept_id', deleteRecord);
+  app.post('/v1/edit/lock/:dept_id', lockSchedule);
 
-  app.post('/v1/pub/publish/:schedule_id', publishSchedule);
-  app.post('/v1/pub/unlock/:schedule_id', unlockSchedule);
-
-}
-
-function generatePDF(req, res){
+  app.post('/v1/pub/publish/:dept_id', publishSchedule);
+  app.post('/v1/pub/unlock/:dept_id', unlockSchedule);
 
 }
 
 function lockSchedule(req, res){
-  var objectId = mongo.toObjectId(req.params.schedule_id);
+  var objectId = mongo.toObjectId(req.params.dept_id);
+  var email = req.headers["x-key"];
 
-mongo.schedules.update(
+  var dept = {};
+  dept._id = req.params.department_id;
+
+  //Does user have permission to change this deparmtent?
+  dept_auth(dept, email, function(secure_data){
+
+    if(secure_data === null){
+      res.status(403);
+      res.json({
+        "status": 403,
+        "message": "Not Authorized"
+      });
+      return;
+    }
+  });
+
+  mongo.schedules.update(
   {
     _id: objectId
   }
@@ -48,7 +57,7 @@ mongo.schedules.update(
 }
 
 function unlockSchedule(req, res){
-  var objectId = mongo.toObjectId(req.params.schedule_id);
+  var objectId = mongo.toObjectId(req.params.dept_id);
 
   mongo.schedules.update(
     {
@@ -70,9 +79,25 @@ function unlockSchedule(req, res){
 }
 
 function deleteRecord(req,res){
-
+  var email = req.headers["x-key"];
   var objectId = mongo.toObjectId(req.params.record_id);
-  var deptObjectId = mongo.toObjectId(req.params.department_id);
+  var deptObjectId = mongo.toObjectId(req.params.dept_id);
+
+  var dept = {};
+  dept._id = req.params.department_id;
+
+  //Does user have permission to change this deparmtent?
+  dept_auth(dept, email, function(secure_data){
+
+    if(secure_data === null){
+      res.status(403);
+      res.json({
+        "status": 403,
+        "message": "Not Authorized"
+      });
+      return;
+    }
+  });
 
   mongo.schedules.update(
     {
@@ -94,7 +119,7 @@ function deleteRecord(req,res){
 }
 
 function publishSchedule(req, res) {
-  var objectId = mongo.toObjectId(req.params.schedule_id);
+  var objectId = mongo.toObjectId(req.params.dept_id);
 
   // get the draft to be published
   mongo.schedules.findOne({
@@ -165,9 +190,23 @@ function updateRecord(req, res){
 
   var whereClause = {};
   var updateObject = {};
-  var record = req.body;
+  var record = req.body.draft.record;
+  var doc = req.body;
   var is_template;
+  var email = req.headers["x-key"];
 
+  //Does user have permission to change this deparmtent?
+  dept_auth(doc, email, function(secure_data){
+
+    if(secure_data === null){
+      res.status(403);
+      res.json({
+        "status": 403,
+        "message": "Not Authorized"
+      });
+      return;
+    }
+  });
 
   if (record.hasOwnProperty("is_template")){
     is_template = record.is_template;
@@ -204,7 +243,7 @@ function updateRecord(req, res){
 
   //[================== PREP OBJECTS FOR INSERT ======================]
   if((record._id == null) || (is_template)){
-    var deptObjectId = mongo.toObjectId(record.dept_id);
+    var deptObjectId = mongo.toObjectId(doc._id);
 
     if(is_template){
       var objectId = mongo.toObjectId(record._id);
@@ -259,7 +298,7 @@ function updateRecord(req, res){
   }
 
 function getAdoptedScheduleById(req, res) {
-  var objectId = mongo.toObjectId(req.params.schedule_id);
+  var objectId = mongo.toObjectId(req.params.dept_id);
 
   mongo.schedules
     .find({
@@ -279,7 +318,23 @@ function getAdoptedScheduleById(req, res) {
 
 function getDraftScheduleById(req, res) {
 
-  var objectId = mongo.toObjectId(req.params.schedule_id);
+  var objectId = mongo.toObjectId(req.params.dept_id);
+  var email = req.headers["x-key"];
+  var dept = {};
+  dept._id = req.params.dept_id;
+
+  //Does user have permission to change this deparmtent?
+  dept_auth(dept, email, function(secure_data){
+
+    if(secure_data === null){
+      res.status(403);
+      res.json({
+        "status": 403,
+        "message": "Not Authorized"
+      });
+      return;
+    }
+  });
 
   mongo.schedules
     .find({

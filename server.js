@@ -46,10 +46,6 @@ app.all('/v1/pub/*', [require('./app/middlewares/validateRequest')]);
 app.all('/v1/admin/*', [require('./app/middlewares/validateRequest')]);
 
 fs.readdirSync(routePath).forEach(function(file) {
-    //Skip the auth file. It has no routes
-    if(file == "auth_rt.js"){
-      return;
-    }
 
     var route=routePath+file;
     require(route)(app);
