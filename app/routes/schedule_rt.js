@@ -22,7 +22,7 @@ function lockSchedule(req, res){
   var email = req.headers["x-key"];
 
   var dept = {};
-  dept._id = req.params.department_id;
+  dept._id = req.params.dept_id;
 
   //Does user have permission to change this deparmtent?
   dept_auth(dept, email, function(secure_data){
@@ -84,7 +84,7 @@ function deleteRecord(req,res){
   var deptObjectId = mongo.toObjectId(req.params.dept_id);
 
   var dept = {};
-  dept._id = req.params.department_id;
+  dept._id = req.params.dept_id;
 
   //Does user have permission to change this deparmtent?
   dept_auth(dept, email, function(secure_data){
