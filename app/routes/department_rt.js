@@ -1,4 +1,8 @@
  var mongo = require('../mongo.js');
+ var dept_auth = require('../private/auth.js').dept_auth;
+ var validateUser = require('../private/auth.js').validateUser;
+
+ var add_dept = require('../private/user.js').add_dept;
  var extend = require('util')._extend;
 
 function setup(app) {
@@ -6,7 +10,7 @@ function setup(app) {
   app.get('/v1/department', getAdoptedDepartment);
 
   app.get('/v1/edit/department', getDraftDepartment);
-  app.put('/v1/edit/department', updateDraftDepartment);
+  app.put('/v1/edit/department/:dept_id', updateDraftDepartment);
   app.put('/v1/edit/add', addDepartment);
 
   app.delete('/v1/pub/department/:department_id', archiveDepartment);
@@ -73,6 +77,7 @@ function archiveDepartment(req, res){
 
 function addDepartment(req, res){
   var draftId = mongo.newObjectId();
+  var email = req.headers["x-key"];
 
   mongo.schedules.insert(
     {
@@ -84,10 +89,19 @@ function addDepartment(req, res){
           "record":[]
       }
     },
-    function(err, doc){
-      res.send(doc[0]);
-    }
-  )
+    function(err, dept){
+      if(err)console.log(err)
+
+       validateUser(email, function(user){
+           add_dept(user._id.toString(), dept[0]._id.toString(), function(data){
+            console.log("add_dept");
+            if(err) console.log(err);
+
+            console.log(data);
+            res.send(dept[0]);
+           })
+       })
+    })
 }
 
 function getAdoptedDepartment(req, res) {
@@ -104,40 +118,77 @@ function getAdoptedDepartment(req, res) {
 }
 
 function getDraftDepartment(req, res) {
+  var email = req.headers['x-key'];
 
   mongo.schedules
     .find({"draft":{"$exists":1}}, {"draft.department":true},{"sort":"draft.department"})
     .toArray(function(err, doc){
       if(err)
         console.log(err);
-      res.send(doc);
+
+        //Does user have permission to change this deparmtent?
+        dept_auth(doc, email, function(secure_data){
+
+          if(secure_data === null){
+            res.status(403);
+            res.json({
+              "status": 403,
+              "message": "Not Authorized"
+            });
+            return;
+          }else{
+            //return just the departments the user has access to
+            res.send(secure_data);
+          }
+
+        });
+
+        // dept_auth(doc, user_email, function(secure_data){
+        //   res.send(secure_data);
+        // });
     });
 }
 
 function updateDraftDepartment(req, res){
-  var objectId = mongo.toObjectId(req.body.sched_id);
+  var email = req.headers['x-key'];
+  var objectId = mongo.toObjectId(req.params.dept_id);
   var dept = req.body;
-  mongo.schedules.update(
-    {
-      "_id": objectId
-    }
-    ,
-    {
-      $set:{
-          "draft.department": dept.department,
-          "draft.website": dept.website,
-          "draft.contact": dept.contact,
-          "draft.email": dept.email,
-          "draft.phone": dept.phone,
-          "draft.ratified_on": dept.ratified_on,
-          "draft.status":"DIRTY"
-        }
-    }
-    , {w:1},
-    function(err, result) {
-      if (err) res.send("err " + err);
-        res.send({"result": result});
+
+    //Does user have permission to change this deparmtent?
+    dept_auth(dept, email, function(secure_data){
+
+      if(secure_data === null){
+        res.status(403);
+        res.json({
+          "status": 403,
+          "message": "Not Authorized"
+        });
+        return;
+      }
     });
+
+    mongo.schedules.update(
+      {
+        "_id": objectId
+      }
+      ,
+      {
+        $set:{
+            "draft.department": dept.draft.department,
+            "draft.website": dept.draft.website,
+            "draft.contact": dept.draft.contact,
+            "draft.email": dept.draft.email,
+            "draft.phone": dept.draft.phone,
+            "draft.ratified_on": dept.draft.ratified_on,
+            "draft.status":"DIRTY"
+          }
+      }
+      , {w:1},
+      function(err, result) {
+        if (err) console.log("err " + err);
+
+          res.send({"result": result});
+      });
 }
 
 module.exports = setup;

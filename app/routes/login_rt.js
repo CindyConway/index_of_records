@@ -1,7 +1,7 @@
 var mongo = require('../mongo.js');
 var bcrypt = require('bcryptjs');
 var jwt = require('jwt-simple');
-var auth = require('../middlewares/auth.js');
+var auth = require('../private/auth.js');
 
 function setup(app) {
   app.post('/v1/login', login);

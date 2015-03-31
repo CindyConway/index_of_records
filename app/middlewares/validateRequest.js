@@ -1,6 +1,6 @@
 var jwt = require('jwt-simple');
-var validateUser = require('./auth.js').validateUser;
-var checkRole = require('./auth.js').checkRole;
+var validateUser = require('../private/auth.js').validateUser;
+var checkRole = require('../private/auth.js').checkRole;
 module.exports = function(req, res, next) {
 
   // When performing a cross domain request, you will recieve

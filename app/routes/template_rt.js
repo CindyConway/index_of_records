@@ -1,19 +1,25 @@
 var mongo = require('../mongo.js');
 var extend = require('util')._extend;
+var dept_auth = require('../private/auth.js').dept_auth;
 
 function setup(app) {
 
   app.get('/v1/pub/template', getTemplate);
   app.put('/v1/pub/template', upsertTemplateRecord);
   app.delete('/v1/pub/template/:record_id', deleteTemplateRecord);
+
   app.get('/v1/edit/template/:dept_id', getTemplateByDept);
-  
+
 }
 
 function getTemplateByDept(req, res) {
   var objectId = mongo.toObjectId(req.params.dept_id);
+  var email = req.headers['x-key'];
   var schedule;
   var template;
+
+  var dept = {};
+  dept._id = req.params.dept_id;
 
   // Get all the template records from the schedule
   mongo.schedules
@@ -26,7 +32,26 @@ function getTemplateByDept(req, res) {
       if (err)
       console.log(err);
 
-      schedule = draft_schedule;
+
+      dept_auth(dept, email, function(secure_data){
+        //User does not have permission to any departments
+        if(secure_data === null){
+          res.status(403);
+          res.json({
+            "status": 403,
+            "message": "Not Authorized"
+          });
+          return;
+        }
+
+        //set schedule to the list of departments the user can edit
+        schedule = draft_schedule;
+      });
+
+      // dept_auth(draft_schedule, user_email, function(secure_data){
+      //   //res.send(secure_data);
+      //   schedule = draft_schedule;
+      // });
 
       // get all the template records
       mongo.template
