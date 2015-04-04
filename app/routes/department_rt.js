@@ -14,7 +14,6 @@ function setup(app) {
   app.put('/v1/edit/add', addDepartment);
 
   app.delete('/v1/pub/department/:department_id', archiveDepartment);
-
 }
 
 
