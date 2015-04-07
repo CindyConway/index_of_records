@@ -93,10 +93,8 @@ function addDepartment(req, res){
 
        validateUser(email, function(user){
            add_dept(user._id.toString(), dept[0]._id.toString(), function(data){
-            console.log("add_dept");
             if(err) console.log(err);
 
-            console.log(data);
             res.send(dept[0]);
            })
        })
