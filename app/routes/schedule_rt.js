@@ -8,7 +8,7 @@ function setup(app) {
   app.get('/v1/schedule/:dept_id', getAdoptedScheduleById);
 
   app.put('/v1/edit/record', updateRecord);
-  app.get('/v1/edit/schedule/:dept_id', getDraftScheduleById);
+  app.get('/v1/temp/schedule/:dept_id', getDraftScheduleById);
   app.delete('/v1/edit/record/:record_id/:dept_id', deleteRecord);
   app.post('/v1/edit/lock/:dept_id', lockSchedule);
 
@@ -324,17 +324,17 @@ function getDraftScheduleById(req, res) {
   dept._id = req.params.dept_id;
 
   //Does user have permission to change this deparmtent?
-  dept_auth(dept, email, function(secure_data){
-
-    if(secure_data === null){
-      res.status(403);
-      res.json({
-        "status": 403,
-        "message": "Not Authorized"
-      });
-      return;
-    }
-  });
+  // dept_auth(dept, email, function(secure_data){
+  //
+  //   if(secure_data === null){
+  //     res.status(403);
+  //     res.json({
+  //       "status": 403,
+  //       "message": "Not Authorized"
+  //     });
+  //     return;
+  //   }
+  // });
 
   mongo.schedules
     .find({
