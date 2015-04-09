@@ -11,9 +11,66 @@ function setup(app) {
   app.get('/v1/temp/schedule/:dept_id', getDraftScheduleById);
   app.delete('/v1/edit/record/:record_id/:dept_id', deleteRecord);
   app.post('/v1/edit/lock/:dept_id', lockSchedule);
+  app.put('/v1/edit/add_template', addTemplateRecord);
 
   app.post('/v1/pub/publish/:dept_id', publishSchedule);
   app.post('/v1/pub/unlock/:dept_id', unlockSchedule);
+
+}
+
+function addTemplateRecord(req, res){
+
+  var record = req.body.draft.record;
+  var doc = req.body;
+  var deptObjectId = mongo.toObjectId(doc._id);
+  var objectId = mongo.toObjectId(record._id);
+
+  var email = req.headers["x-key"];
+
+  //Does user have permission to change this deparmtent?
+  dept_auth(doc, email, function(secure_data){
+
+    if(secure_data === null){
+      res.status(403);
+      res.json({
+        "status": 403,
+        "message": "Not Authorized"
+      });
+      return;
+    }
+  });
+
+  mongo.schedules.update(
+    {
+      _id : deptObjectId
+    }
+    ,{
+      $push: {
+          "draft.record":{
+              "_id": objectId,
+              "title": record.title,
+              "link": record.link,
+              "category": record.category,
+              "retention": record.retention,
+              "on_site": record.on_site,
+              "off_site": record.off_site,
+              "total": record.total,
+              "division": record.division,
+              "business_unit": record.business_unit,
+              "remarks": record.remarks,
+              "is_template": record.is_template,
+              "status": "DIRTY"
+            }
+
+      }
+    }
+    , {},
+    function(err, result) {
+      if (err) res.send("err " + err);
+      res.send({
+        "record_id": objectId
+      });
+    });
 
 }
 
@@ -192,13 +249,12 @@ function updateRecord(req, res){
   var updateObject = {};
   var record = req.body.draft.record;
   var doc = req.body;
-  var is_template;
   var email = req.headers["x-key"];
 
   //Does user have permission to change this deparmtent?
   dept_auth(doc, email, function(secure_data){
 
-    if(secure_data === null){
+    if(secure_data == null){
       res.status(403);
       res.json({
         "status": 403,
@@ -208,14 +264,8 @@ function updateRecord(req, res){
     }
   });
 
-  if (record.hasOwnProperty("is_template")){
-    is_template = record.is_template;
-  }else{
-    is_template = false;
-  }
-
   //[=================== PREP OBJECT FOR UPDATE ==========================]
-  if(record._id != null && !is_template){
+  if(record._id != null){
     var objectId = mongo.toObjectId(record._id);
 
     whereClause = {
@@ -234,7 +284,7 @@ function updateRecord(req, res){
                       "draft.record.$.division": record.division,
                       "draft.record.$.business_unit": record.business_unit,
                       "draft.record.$.remarks": record.remarks,
-                      "draft.record.$.is_template": is_template,
+                      "draft.record.$.is_template": record.is_template,
                       "draft.record.$.status": "DIRTY"
                     }
                   };
@@ -242,16 +292,9 @@ function updateRecord(req, res){
 
 
   //[================== PREP OBJECTS FOR INSERT ======================]
-  if((record._id == null) || (is_template)){
+  if(record._id === null){
     var deptObjectId = mongo.toObjectId(doc._id);
-
-    if(is_template){
-      var objectId = mongo.toObjectId(record._id);
-    }
-
-    if(!is_template){
-      var objectId = mongo.newObjectId();
-    }
+    var objectId = mongo.toObjectId(record._id);
 
     whereClause = {
         "_id": deptObjectId
@@ -271,7 +314,7 @@ function updateRecord(req, res){
                               "division": record.division,
                               "business_unit": record.business_unit,
                               "remarks": record.remarks,
-                              "is_template": is_template,
+                              "is_template": record.is_template,
                               "status": "DIRTY"
                             }
 
