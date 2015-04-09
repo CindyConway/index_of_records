@@ -1,4 +1,4 @@
-curl -XPUT 'http://ADD_URL:ADD_PORT/_river/mongodb/_meta' -d '{
+curl -XPUT 'http://localhost:9200/_river/mongodb/_meta' -d '{
     "type": "mongodb",
     "mongodb": {
       "db": "index_of_records",

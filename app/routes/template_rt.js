@@ -119,9 +119,6 @@ function getTemplateByDept(req, res) {
              }
            }
 
-
-           console.log(templateClone);
-           //console.log(template);
           res.send(templateClone);
 
         });
