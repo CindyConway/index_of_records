@@ -80,10 +80,10 @@ function getSearch(req, res){
   queryObj.aggs["departments"] = {};
   queryObj.aggs.departments["terms"] = {};
   queryObj.aggs.departments.terms["field"] = "department.og";
-  queryObj.aggs.departments["aggs"] = {};
-  queryObj.aggs.departments.aggs["division"] = {};
-  queryObj.aggs.departments.aggs.division["terms"] = {};
-  queryObj.aggs.departments.aggs.division.terms["field"] = "division.og";
+  // queryObj.aggs.departments["aggs"] = {};
+  // queryObj.aggs.departments.aggs["division"] = {};
+  // queryObj.aggs.departments.aggs.division["terms"] = {};
+  // queryObj.aggs.departments.aggs.division.terms["field"] = "division.og";
   queryObj.aggs.category = {};
   queryObj.aggs.category["terms"] = {};
   queryObj.aggs.category.terms["field"] = "category.og";
@@ -130,7 +130,6 @@ function getSearch(req, res){
  }
 
   var queryString = JSON.stringify(queryObj, undefined, 0);
-  //console.log(JSON.stringify(queryObj, undefined, 2));
   request.post({
     url:ES_SERVER + 'record_types/_search',
     form: queryString},

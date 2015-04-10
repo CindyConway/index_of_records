@@ -123,7 +123,18 @@ PUT /index_of_records/
         },
         "retention": {
           "type": "string",
-          "index": "analyzed"
+          "index": "analyzed",
+          "analyzer": "english",
+          "fields": {
+            "std": {
+              "type": "string",
+              "analyzer": "standard"
+            },
+            "og": {
+              "type": "string",
+              "index": "not_analyzed"
+            }
+          }
         },
         "revision": {
           "type": "string",

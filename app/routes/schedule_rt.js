@@ -266,6 +266,7 @@ function updateRecord(req, res){
 
   //[=================== PREP OBJECT FOR UPDATE ==========================]
   if(record._id != null){
+
     var objectId = mongo.toObjectId(record._id);
 
     whereClause = {
@@ -293,8 +294,9 @@ function updateRecord(req, res){
 
   //[================== PREP OBJECTS FOR INSERT ======================]
   if(record._id === null){
+
     var deptObjectId = mongo.toObjectId(doc._id);
-    var objectId = mongo.toObjectId(record._id);
+    var objectId = mongo.newObjectId(record._id);
 
     whereClause = {
         "_id": deptObjectId
