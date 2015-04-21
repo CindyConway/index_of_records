@@ -2,7 +2,7 @@ var mongodb = require('mongodb');
 
 module.exports.init = function(callback) {
 
-  var server = new mongodb.Server("127.0.0.1", 27017, {});
+  var server = new mongodb.Server("10.250.60.109", 27017, {});
 
   new mongodb.Db('index_of_records', server, {
     w: 1
