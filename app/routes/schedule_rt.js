@@ -59,7 +59,7 @@ function addTemplateRecord(req, res){
               "business_unit": record.business_unit,
               "remarks": record.remarks,
               "is_template": record.is_template,
-              "status": "DIRTY"
+              "status": "Edited"
             }
 
       }
@@ -100,7 +100,7 @@ function lockSchedule(req, res){
   }
   ,{
     $set:{
-      "draft.status": "LOCKED"
+      "draft.status": "Locked"
     }
   }
   , {},
@@ -122,7 +122,7 @@ function unlockSchedule(req, res){
     }
     ,{
       $set:{
-        "draft.status": "DIRTY"
+        "draft.status": "Edited"
       }
     }
     , {},
@@ -191,22 +191,22 @@ function publishSchedule(req, res) {
     //Make clone of adopted schedule for history array
     jsonHistory = extend({}, document.adopted);
 
-    //change the status of all the draft records to clean
-    document.draft.record.forEach(function(record) {
-      record.status = "CLEAN";
-    });
-
-    //change the status of the department information to clean
-    document.draft.status = "CLEAN";
-
     //clone draft. This will become the published (aka adopted) schedule
-    jsonAdopted = extend({}, document.draft);
+    var jsonAdopted = (JSON.parse(JSON.stringify(document.draft)));
     jsonAdopted.published_by = "Geoff Pavey"; //TODO
     jsonAdopted.published_on = new Date();
     jsonAdopted.status = "SEND_TO_SEARCHABLE";
 
     //remove the existing adopted schedule
     delete document.adopted;
+
+    //change the status of all the draft records to published
+    document.draft.record.forEach(function(record) {
+      record.status = "Published";
+    });
+
+    //change the status of the department information to published
+    document.draft.status = "Published";
 
     //add the current draft as the new version of the adopted schedule
     document.adopted = jsonAdopted;
@@ -287,7 +287,7 @@ function updateRecord(req, res){
                       "draft.record.$.business_unit": record.business_unit,
                       "draft.record.$.remarks": record.remarks,
                       "draft.record.$.is_template": record.is_template,
-                      "draft.record.$.status": "DIRTY"
+                      "draft.record.$.status": "Edited"
                     }
                   };
   }
@@ -319,7 +319,7 @@ function updateRecord(req, res){
                               "business_unit": record.business_unit,
                               "remarks": record.remarks,
                               "is_template": record.is_template,
-                              "status": "DIRTY"
+                              "status": "Edited"
                             }
 
                       }

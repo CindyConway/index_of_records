@@ -64,7 +64,7 @@ oplog.on('update', function (doc) {
             console.log("removed: " + NoRemoved )
           });
 
-          schedules.update({_id: sched_id_obj},{$set:{"adopted.status":"CLEAN"}}, function(err, result){
+          schedules.update({_id: sched_id_obj},{$set:{"adopted.status":""}}, function(err, result){
             if(err){console.log(err)};
             mongo_conx.close();
           });

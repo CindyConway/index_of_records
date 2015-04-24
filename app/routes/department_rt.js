@@ -84,7 +84,7 @@ function addDepartment(req, res){
           _id : draftId,
           "department": "new organization",
           "revision":1,
-          "status": "DRAFT",
+          "status": "Edited",
           "record":[]
       }
     },
@@ -177,7 +177,7 @@ function updateDraftDepartment(req, res){
             "draft.email": dept.draft.email,
             "draft.phone": dept.draft.phone,
             "draft.ratified_on": dept.draft.ratified_on,
-            "draft.status":"DIRTY"
+            "draft.status":"Edited"
           }
       }
       , {w:1},
