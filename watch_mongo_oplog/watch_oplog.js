@@ -25,7 +25,10 @@ oplog.on('update', function (doc) {
 
   var status = getVal(opObj,'adopted.status');
   var id = getVal(idObj,'_id');
-
+if(typeof opObj.adopted != 'undefined'){
+	console.log(opObj.adopted.status);
+	status = opObj.adopted.status;
+}
   // exit if status is not 'SEND_TO_SEARCHABLE'
   if( status != 'SEND_TO_SEARCHABLE') return;
 
@@ -115,7 +118,6 @@ function getVal(theObject, theProp) {
     if(prop == theProp) {
       return theObject[prop];
     }
-
     if(theObject[prop] instanceof Object)
       result = getVal(theObject[prop], theProp);
     }
