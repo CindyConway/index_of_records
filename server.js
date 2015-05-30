@@ -62,8 +62,9 @@ app.use(function(req, res, next) {
 mongo.init(function (error) {
   if (error)
     console.log( error);
-
+console.log("1");
   app.listen(1971); //database is initialized, ready to listen for connections
+console.log("2");
 });
 
 var port = process.env.PORT || 1971;    // set our port

@@ -87,7 +87,6 @@ function generatePDF(req,res){
     obj._id = sched_id;
     var email = req.headers['x-key'];
     var token = req.headers['x-access-token'];
-
     // dept_auth(obj, email, function(secure_data){
     //   //User does not have permission to any departments
     //   if(secure_data === null){
@@ -109,7 +108,7 @@ function generatePDF(req,res){
 
     function makePDF(dept_name){
       var dept_name = dept_name.split(" ").join("_");
-      var clientAppLocation = 'http://localhost/~cindy/sunshine/build/#';
+      var clientAppLocation = 'http://10.250.60.109/sunshine/build/#';
       var config = {};
 
       config.pageSize = 'legal';
@@ -118,10 +117,9 @@ function generatePDF(req,res){
       config.footerRight = 'Generated on: [date]';
       config.marginTop = '17mm';
       config.marginBottom = '10mm';
-      config.headerHtml = 'file:////Users/cindy/Projects/index_of_records/app/pdf_header_template/header.html';
-
+      config.headerHtml = 'file:////var/www/html/index_of_records/app/pdf_header_template/header.html';
       var url = clientAppLocation + "/schedule/" + sched_id;
-      var file_name = "/Users/cindy/pdf/" + dept_name + ".pdf";
+      var file_name = "/var/www/html/index_of_records/pdf/" + dept_name + ".pdf";
       var disposition = "attachment; filename=\"" + dept_name + ".pdf\"";
       var stream = fs.createWriteStream(file_name);
 

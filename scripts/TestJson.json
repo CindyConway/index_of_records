@@ -1,0 +1,4 @@
+[
+{dept:"test_three",contact:"Cindy Conway", trial: null, records:[{title:"this one", on_site:"1 year",mod_on:{"$date":1409685073269}},{title:"this two", on_site:"1 year"}]},
+{dept:"test_two",contact:"Cindy Conway",records:[{title:"this one", on_site:"1 year"},{title:"this two", on_site:"1 year"}]}
+]
