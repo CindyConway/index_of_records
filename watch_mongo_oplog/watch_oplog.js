@@ -84,7 +84,7 @@ oplog.on('update', function (doc) {
 
 
                       // ------------ 5. Put the status of the adopted schedule back to clean
-                      schedules.update({_id: idObj},{$set:{"adopted.status":""}}, function(err, result){
+                      schedules.update({_id: idObj},{$set:{"adopted.status":"Published"}}, function(err, result){
                         if(err){console.log(err)};
                         //mongo_conx.close();
                       });

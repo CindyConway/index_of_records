@@ -243,6 +243,7 @@ function publishSchedule(req, res) {
   // documents in history
 }
 
+
 function updateRecord(req, res){
 
   var whereClause = {};
@@ -265,8 +266,7 @@ function updateRecord(req, res){
   });
 
   //[=================== PREP OBJECT FOR UPDATE ==========================]
-  if(record._id != null){
-
+  if(record._id != null && doc.undo == false){
     var objectId = mongo.toObjectId(record._id);
 
     whereClause = {
@@ -327,21 +327,81 @@ function updateRecord(req, res){
                     };
   }
 
+  //[=================== PREP UNDO OBJECT FOR INSERT ==========================]
+  // do to a Handsontable bug on the client side
+  if(record._id != null && doc.undo == true){
+    var deptObjectId = mongo.toObjectId(doc._id);
+    var objectId = mongo.newObjectId(record._id);
+
+    whereClause = {
+        "_id": deptObjectId
+      };
+
+      updateObject = {
+                      $push: {
+                          "draft.record":{
+                              "_id": objectId,
+                              "title": record.title,
+                              "link": record.link,
+                              "category": record.category,
+                              "retention": record.retention,
+                              "on_site": record.on_site,
+                              "off_site": record.off_site,
+                              "total": record.total,
+                              "division": record.division,
+                              "division_contact": record.division_contact,
+                              "business_unit": record.business_unit,
+                              "remarks": record.remarks,
+                              "is_template": record.is_template,
+                              "status": "Edited"
+                            }
+
+                      }
+
+                    };
+  }
+
 
   //[============= MAKE MONGODB CALL =================================]
+  //This is the very ugly fix for the handsontable bug on the client side.
+  // When  the users does an "undo" for a deleted row,
+  // all rows beneth it call autosave. The code below checks to see if the
+  // record exists in the schedule, and only inserts it if it does not.
+    if(doc.undo == true){
+      var objectId = mongo.toObjectId(record._id);
 
-  mongo.schedules.update(
-    whereClause
-    ,
-    updateObject
-    , {},
-    function(err, result) {
-      if (err) res.send("err " + err);
-      res.send({
-        "record_id": objectId
-      });
-    });
+        mongo.schedules.find({"draft.record._id": objectId})
+        .count(function(err, count) {
+          if(count == 0){
+            mongo.schedules.update(
+              whereClause
+              ,
+              updateObject
+              , {},
+              function(err, result) {
+                if (err) res.send("err " + err);
+                res.send({
+                  "record_id": objectId
+                });
+              });
+          }
 
+        });
+
+    }else{
+
+        mongo.schedules.update(
+          whereClause
+          ,
+          updateObject
+          , {},
+          function(err, result) {
+            if (err) res.send("err " + err);
+            res.send({
+              "record_id": objectId
+            });
+          });
+      }
   }
 
 function getAdoptedScheduleById(req, res) {
@@ -353,7 +413,7 @@ function getAdoptedScheduleById(req, res) {
     }, {
       adopted: 1
     }, {
-      sort: "adopted.record.category"
+      sort: "adopted.record.title"
     })
     .toArray(function(err, doc) {
       if (err)
