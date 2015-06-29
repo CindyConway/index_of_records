@@ -108,24 +108,22 @@ function generatePDF(req,res){
 
     function makePDF(dept_name){
       var dept_name = dept_name.split(" ").join("_");
-      var clientAppLocation = 'http://10.250.60.109/sunshine/build/#';
+      var clientAppLocation = 'http://208.121.200.223/sunshine/build/#';
       var config = {};
-
       config.pageSize = 'legal';
       config.orientation = 'Landscape';
       config.footerLeft = '[page]/[topage]';
       config.footerRight = 'Generated on: [date]';
       config.marginTop = '17mm';
       config.marginBottom = '10mm';
-      config.headerHtml = 'file:////var/www/html/index_of_records/app/pdf_header_template/header.html';
+      config.headerHtml = 'file:////index_of_records/app/pdf_header_template/header.html';
       var url = clientAppLocation + "/schedule/" + sched_id;
-      var file_name = "/var/www/html/index_of_records/pdf/" + dept_name + ".pdf";
+      var file_name = "/index_of_records/pdf/" + dept_name + ".pdf";
       var disposition = "attachment; filename=\"" + dept_name + ".pdf\"";
       var stream = fs.createWriteStream(file_name);
-
       stream.on('finish', function(){
         fs.readFile(file_name, function (err,data){
-            res.contentType("application/pdf");
+	    res.contentType("application/pdf");
             res.setHeader("Content-Disposition", disposition);
             res.send(data);
         });

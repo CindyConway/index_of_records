@@ -1,1 +1,3 @@
 pdf/
+app/mongo.js
+app/routes/search_rt.js

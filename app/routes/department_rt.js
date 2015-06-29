@@ -16,7 +16,6 @@ function setup(app) {
   app.delete('/v1/pub/department/:department_id', archiveDepartment);
 }
 
-
 function archiveDepartment(req, res){
   var objectId = mongo.toObjectId(req.params.department_id);
 
