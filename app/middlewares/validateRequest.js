@@ -22,9 +22,7 @@ module.exports = function(req, res, next) {
           // Authorize the user to see if s/he can access our resources
           validateUser(key, function(dbUser){
               if (dbUser) {
-
                        checkRole(dbUser, req.url, function(is_valid){
-
                                    if (is_valid) {
                                       next(); // To move to next middleware
                                    } else {
