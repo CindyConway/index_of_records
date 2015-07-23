@@ -108,7 +108,7 @@ function generatePDF(req,res){
 
     function makePDF(dept_name){
       var dept_name = dept_name.split(" ").join("_");
-      var clientAppLocation = 'http://208.121.200.223/sunshine/build/#';
+      var clientAppLocation = 'http://208.121.200.223/#';
       var config = {};
       config.pageSize = 'legal';
       config.orientation = 'Landscape';

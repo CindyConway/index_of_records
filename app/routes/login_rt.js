@@ -4,7 +4,7 @@ var jwt = require('jwt-simple');
 var auth = require('../private/auth.js');
 
 function setup(app) {
-  //app.post('/v1/user_update', updateAccount)
+  app.post('/v1/user_update', updateAccount)
   app.post('/v1/login', login);
   app.post('/v1/signup', signup);
 }

@@ -24,6 +24,7 @@ app.use(bodyParser.json());
 //     return next();
 // })
 app.all('/*', function(req, res, next) {
+console.log(req.originalUrl);
   // CORS headers
   res.header("Access-Control-Allow-Origin", "*"); // restrict it to the required domain
   res.header('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE,OPTIONS');
@@ -38,7 +39,7 @@ app.all('/*', function(req, res, next) {
 
 
 // Auth Middleware - This will check if the token is valid
-// Only the requests that start with /api/v1/* will be checked for the token.
+// Only the requests that start with /v1/* will be checked for the token.
 // Any URL's that do not follow the below pattern should be avoided unless you
 // are sure that authentication is not needed
 app.all('/v1/edit/*', [require('./app/middlewares/validateRequest')]);
@@ -62,14 +63,12 @@ app.use(function(req, res, next) {
 mongo.init(function (error) {
   if (error)
     console.log( error);
-console.log("1");
-  app.listen(1971); //database is initialized, ready to listen for connections
-console.log("2");
+    app.listen(1971); //database is initialized, ready to listen for connections
 });
 
 var port = process.env.PORT || 1971;    // set our port
 
 module.exports = app;
 
-app.listen(port);
+app.listen(port, '127.0.0.1');
 console.log('Transparency happens on port ' + port + ' ' + new Date().toLocaleString());
