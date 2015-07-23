@@ -13,20 +13,9 @@ var app = express();
 app.use(compression())
 app.use(bodyParser.json());
 
-//Uncomment for x-www-form-urlencoded posts/puts
-//app.use(bodyParser.urlencoded({ extended: false }));
-
-//Added to allow cross-domain request from the UI
-// app.use(function(req,res, next){
-//     res.setHeader('Access-Control-Allow-Origin', '*');
-//     res.setHeader('Access-Control-Allow-Headers', 'Origin, Origin, X-Requested-With, Content-Type, Accept');
-//     res.setHeader('Access-Control-Allow-Methods', 'GET,PUT,POST,HEAD,DELETE,OPTIONS');
-//     return next();
-// })
 app.all('/*', function(req, res, next) {
-console.log(req.originalUrl);
   // CORS headers
-  res.header("Access-Control-Allow-Origin", "*"); // restrict it to the required domain
+  res.header("Access-Control-Allow-Origin", "http://localhost"); // restrict it to the required domain
   res.header('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE,OPTIONS');
   // Set custom headers for CORS
   res.header('Access-Control-Allow-Headers', 'Content-type,Accept,X-Access-Token,X-Key');
